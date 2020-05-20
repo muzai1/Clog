@@ -16,3 +16,5 @@ Notes and logs.
 
 ## 大哥的漏洞
 [Gitea & Gogs Rce 总结](https://github.com/muzai/Clog/tree/master/vuls/ovuls/GiteaAndGogsRce.md)
+
+[cve-2020-10199/10204事件调查](https://github.com/muzai/Clog/blob/master/vuls/ovuls/SonatypeNexusRce.md)
