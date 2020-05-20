@@ -30,7 +30,7 @@ ConstraintValidatorContext#disableDefaultConstraintViolation();
 ConstraintValidatorContext#buildConstraintViolationWithTemplate(用户输入拼接)
 ```
 ![](media/15881687248892/15881925588332.jpg)
-object参数是被校验的值，所以它必须是String或者包含String的复杂类型，比如Iterator、List等，并且污点数据流需要进入buildConstraintViolationWithTemplate的参数数据流中。
+object参数是被校验的值，所以它必须是String或者包含String的复杂类型，比如Iterator、List等，并且污点数据流需要进入`buildConstraintViolationWithTemplate`的参数数据流中。
 
 ## 修复
 修复版本是3.21.2，首先看看修复前后 Bootstrap Validator 的对比。
@@ -45,13 +45,13 @@ object参数是被校验的值，所以它必须是String或者包含String的�
 ![-w962](media/15881687248892/15883180233718.jpg)
 判断字符串是否是EL表达式的方法就是看字符串是否以$开头。
 ![-w932](media/15881687248892/15883182238724.jpg)
-对比看下`AbstractMessageInterpolator`另外一个子类的interpolate方法就很直观了，没做任何判断，直接解析。如果想达到rce，必须控制调用流到这里。
+对比看下`AbstractMessageInterpolator`另外一个子类的`interpolate`方法就很直观了，没做任何判断，直接解析。如果想rce，必须控制调用流到这里。
 ![-w1322](media/15881687248892/15883184516637.jpg)
 不做判断，继续调用
 ![-w814](media/15881687248892/15883189299004.jpg)
 到这里就能看到`createValueExpression + getValue`
 ![-w1107](media/15881687248892/15883337294742.jpg)
-用`ParameterMessageInterpolator`就是前文提到的特殊情况，在用ParameterMessageInterpolator初始化了ValidatorFacotry后，即使拼接了用户输入到buildConstraintViolationWithTemplate的参数中，也不会造成rce。但这还不是官方建议的防注入方式，官方建议使用HibernateConstraintValidatorContext来避免注入
+用`ParameterMessageInterpolator`就是前文提到的特殊情况，在用`ParameterMessageInterpolator`初始化了`ValidatorFacotry`后，即使拼接了用户输入到`buildConstraintViolationWithTemplate`的参数中，也不会造成rce。但这还不是官方建议的防注入方式，官方建议使用`HibernateConstraintValidatorContext`来避免注入
 ![-w1347](media/15881687248892/15899779733018.jpg)
-另外根据官方文档，`ResourceBundleMessageInterpolator`（前文提到的`AbstractMessageInterpolator`另外一个子类）是 Hibernate-Validator 的默认消息插入器，即如果不在Bootstrap Validator时指定ParameterMessageInterpolator，一旦消息参数中拼接了用户输入流，就会造成rce。
+另外根据官方文档，`ResourceBundleMessageInterpolator`（前文提到的`AbstractMessageInterpolator`另外一个子类）是 Hibernate-Validator 的默认消息插入器，即如果不在Bootstrap Validator时指定`ParameterMessageInterpolator`，一旦消息参数中拼接了用户输入流，就会造成rce。
 
