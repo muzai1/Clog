@@ -2,9 +2,13 @@
 
 ## 参考
 https://securitylab.github.com/advisories/GHSL-2020-011-nxrm-sonatype
+
 https://securitylab.github.com/advisories/GHSL-2020-012-nxrm-sonatype
+
 https://securitylab.github.com/advisories/GHSL-2020-013-nxrm-sonatype
+
 https://securitylab.github.com/advisories/GHSL-2020-014-nxrm-sonatype
+
 https://securitylab.github.com/advisories/GHSL-2020-015-nxrm-sonatype
 
 ## 概述
